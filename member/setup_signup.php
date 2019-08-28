@@ -6,7 +6,7 @@
 </head>
 <?php
   // db연결
-  require_once '/dbcon.php';
+  require_once "../dbcon.php";
   $connection= new mysqli($hn,$un,$pw,$db);
 
   if($connection->connect_error) die($connection->connect_error);
@@ -42,10 +42,10 @@
     }
   }
 
+  echo "<script>alert('회원가입이 완료되었습니다.');</script>";
+  echo "<script>location.replace('../index.php');</script>";
+
   $connection->close();
 ?>
-<script>
-  alert("회원가입이 완료되었습니다.");
-  location.replace('../index.php');
-</script>
+
 </html>
