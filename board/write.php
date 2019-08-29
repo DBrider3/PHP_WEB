@@ -119,7 +119,7 @@ table.table2 td {
 <p></p>
 <p></p>
 
-<form method = "post" action = "write_action.php">
+<form method = "post" action = "write_action.php" enctype="multipart/form-data">
         <table  style="padding-top:50px" align = center width=800 border=0 cellpadding=2 >
                 <tr>
                 <td height=20 align= center bgcolor=#ccc><font color=white> 글쓰기</font></td>
@@ -140,6 +140,11 @@ table.table2 td {
                         <tr>
                         <td>내용</td>
                         <td><textarea name = content cols=85 rows=15></textarea></td>
+                        </tr>
+
+                        <tr>
+                        <td>첨부파일</td>
+                        <td><input type="file" value="1"name="b_file"/></td>
                         </tr>
 
                         </table>

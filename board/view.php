@@ -18,9 +18,10 @@ if($connection->connect_error) die($connection->connect_error);
 
 $idx = $_GET['idx'];
 
-$query = "select title, content, date, hit, id from board where idx =$idx";
+$query = "select title, content, date, hit, id, file from board where idx =$idx";
 $result = $connection->query($query);
 $rows = mysqli_fetch_assoc($result);
+
 
 // 조회수
 $hit = "update board set hit=hit+1 where idx=$idx";
@@ -202,7 +203,9 @@ $connection->query($hit);
       </tr>
       </table>
 
-
+      <div>
+      파일 : <a class="btn" href="./upload/<?php echo $rows['file'];?>" download><?php echo $rows['file']; ?></a>
+      </div>
       <!-- MODIFY & DELETE -->
       <div class="view_btn">
               <button class="view_btn1" onclick="location.href='./list.php'">목록으로</button>

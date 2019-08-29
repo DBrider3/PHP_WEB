@@ -1,11 +1,8 @@
 <!DOCTYPE>
 <?php
 session_start();
+require_once "../dbcon.php";
 $is_logged = $_SESSION['is_logged'];
-
-// db연결
-require_once $_SERVER['DOCUMENT_ROOT'].'/dbcon.php';
-
 if($is_logged=='YES') {
   $user_id = $_SESSION['id'];
   $message = $user_id . ' 님, 로그인 했습니다.';
@@ -26,6 +23,11 @@ $rows = mysqli_fetch_assoc($result);
 $title = $rows['title'];
 $content = $rows['content'];
 $id = $rows['id'];
+
+if($user_id!=$id){
+  echo "<script>alert('권한이 없습니다.');</script>";
+  echo "<script>location.replace('list.php');</script>";
+}
 
 ?>
 
@@ -139,7 +141,7 @@ table.table2 td {
 <p></p>
 <p></p>
 
-<form method = "get" action = "modify_action.php">
+<form method = "post" action = "modify_action.php" enctype="multipart/form-data">
         <table  style="padding-top:50px" align = center width=800 border=0 cellpadding=2 >
                 <tr>
                 <td height=20 align= center bgcolor=#ccc><font color=white> 글수정</font></td>
@@ -149,7 +151,7 @@ table.table2 td {
                 <table class = "table2">
                         <tr>
                         <td>작성자</td>
-                        <td><input type="hidden" name="name" value="<?=$user_id?>"><?=$user_id?></td>
+                        <td><input type="hidden" name="id" value="<?=$id?>"><?=$id?></td>
                         </tr>
 
                         <tr>
@@ -160,6 +162,11 @@ table.table2 td {
                         <tr>
                         <td>내용</td>
                         <td><textarea name = content cols=85 rows=15></textarea></td>
+                        </tr>
+
+                        <tr>
+                        <td>첨부파일</td>
+                        <td><input type="file" value="1"name="b_file"/></td>
                         </tr>
 
                         </table>
