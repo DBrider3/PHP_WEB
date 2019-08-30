@@ -5,15 +5,10 @@
     <meta charset="utf-8" >
 </head>
 <?php
-  // session 검증 부분
-  session_start();
-  $is_logged = $_SESSION['is_logged'];
-  if($is_logged=='YES') {
-    $user_id = $_SESSION['id'];
-  }
-  else echo "<script>location.replace('/member/login.php');</script>";
+  require_once $_SERVER['DOCUMENT_ROOT'].'/check.php';
+  require_once $_SERVER['DOCUMENT_ROOT'].'/dbcon.php';
+
   // db연결
-  require_once "../dbcon.php";
   $connection= new mysqli($hn,$un,$pw,$db);
 
   if($connection->connect_error) die($connection->connect_error);

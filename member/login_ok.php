@@ -7,7 +7,7 @@
 <?php
   session_start();
   // db연결
-  require_once "../dbcon.php";
+  require_once $_SERVER['DOCUMENT_ROOT'].'/dbcon.php';
   $connection= new mysqli($hn,$un,$pw,$db);
 
   if($connection->connect_error) die($connection->connect_error);
@@ -30,6 +30,7 @@
     if($row['pw']==$user_pw){  //MYSQLI_ASSOC 필드명으로 첨자 가능
         $_SESSION['id']=$user_id;           //로그인 성공 시 세션 변수 만들기
         $_SESSION['is_logged'] = 'YES';
+        $_SESSION['is_admin'] = $row['is_admin'];
         if(isset($_SESSION['id']))    //세션 변수가 참일 때
         {
           header('Location: ../index.php'); //로그인 성공 시 페이지 이동

@@ -6,7 +6,7 @@
 </head>
 <?php
   // db연결
-  require_once "../dbcon.php";
+  require_once $_SERVER['DOCUMENT_ROOT'].'/dbcon.php';
   $connection= new mysqli($hn,$un,$pw,$db);
 
   if($connection->connect_error) die($connection->connect_error);
@@ -19,6 +19,8 @@
   // Password_Check
   if($user_pw!=$user_pw2){
     echo "<script>alert('패스워드가 일치하지 않습니다.');</script>";
+    echo "<script>location.replace('signup.php');</script>";
+    exit();
   }
 ?>
 <?php

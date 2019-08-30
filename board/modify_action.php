@@ -5,15 +5,10 @@
     <meta charset="utf-8" >
 </head>
 <?php
-  // session 검증 부분
-  session_start();
-  $is_logged = $_SESSION['is_logged'];
-  if($is_logged=='YES') {
-    $user_id = $_SESSION['id'];
-  }
-  else echo "<script>location.replace('/member/login.php');</script>";
+  require_once $_SERVER['DOCUMENT_ROOT'].'/check.php';
+
   // db연결
-  require_once "../dbcon.php";
+  require_once $_SERVER['DOCUMENT_ROOT'].'/dbcon.php';
   $connection= new mysqli($hn,$un,$pw,$db);
 
   if($connection->connect_error) die($connection->connect_error);
@@ -21,6 +16,10 @@
 
   extract($_POST); // 이것을 이용해서 post 또는 get 방식으로 전달된 내용을 php변수에 담아냄
 
+
+  // 업로드 보안
+  $valid_file_extensions = array(".jpg", ".jpeg", ".gif", ".png");
+  $file_extension = strrchr($filename, ".");
   // 업로드
   $tmpfile =  $_FILES['b_file']['tmp_name'];
   $o_name = $_FILES['b_file']['name'];
@@ -28,12 +27,22 @@
   // $filename = iconv("UTF-8", "EUC-KR",$_FILES['b_file']['name']);
   $folder = "./upload/".$filename;
 
-  if(move_uploaded_file($tmpfile,$folder)){
-    echo "<script>alert('파일이 등록되었습니다.');</script>";
+  $valid_file_extensions = array(".jpg", ".jpeg", ".gif", ".png");
+  $file_extension = strrchr($filename, ".");
+
+  // 올라온 파일이 실제로 이미지인지 체크한다.
+  // 만약 이미지라면 저장 폴더로 옮긴다.
+  if (in_array($file_extension, $valid_file_extensions)) {
+    $destination = $folder . $o_name;
+    if(move_uploaded_file($tmpfile, $destination)){
+      echo "<script>alert('파일이 등록되었습니다.');</script>";
+    }
+    else{
+      echo "<script>alert('파일이 등록되지 않았습니다.');</script>";
+    }
   }
-  else{
-    echo "<script>alert('파일이 등록되지 않았습니다.');</script>";
-  }
+
+
   $date = date('Y-m-d H:i:s');
 
   // 검증

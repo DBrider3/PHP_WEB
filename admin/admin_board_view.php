@@ -1,10 +1,9 @@
 <!DOCTYPE>
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'].'/check.php';
-require_once $_SERVER['DOCUMENT_ROOT'].'/head.php';
+// 1. 공통
+require_once $_SERVER['DOCUMENT_ROOT'].'/admin.php';
+// db연결
 require_once $_SERVER['DOCUMENT_ROOT'].'/dbcon.php';
-
-
 $connection= new mysqli($hn,$un,$pw,$db);
 
 if($connection->connect_error) die($connection->connect_error);
@@ -127,9 +126,7 @@ $connection->query($hit);
       </div>
       <!-- MODIFY & DELETE -->
       <div class="view_btn">
-              <button class="view_btn1" onclick="location.href='./list.php'">목록으로</button>
-              <button class="view_btn1" onclick="location.href='./modify.php?idx=<?=$idx?>&id=<?=$user_id?>'">수정</button>
-              <button class="view_btn1" onclick="location.href='./delete.php?idx=<?=$idx?>&id=<?=$user_id?>'">삭제</button>
+              <button class="view_btn1" onclick="location.href='./admin_board_list.php'">목록으로</button>
       </div>
 
 </body>

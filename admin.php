@@ -1,74 +1,48 @@
 <?php
+// session 검증 부분
+session_start();
+$is_logged = $_SESSION['is_logged'];
+if($is_logged=='YES') {
+  $user_id = $_SESSION['id'];
+  if ($user_id == 'admin' && $_SESSION['is_admin']==1){
+    $message = $user_id . ' , 관리자 로그인 했습니다.';
+    // header("Location: admin.php");
+  }
+  else{
+    $message = $user_id . ' 님, 로그인 했습니다.';
+    header("Location: index.php");
+  }
+}
+else echo "<script>location.replace('/member/login.php');</script>";
 
-    include('dbcon.php');
-    include('check.php');
+require_once $_SERVER['DOCUMENT_ROOT'].'/head.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/dbcon.php';
 
-    if (is_login()){
 
-        if ($_SESSION['user_id'] == 'admin' && $_SESSION['is_admin']==1)
-            ;
-        else
-            header("Location: welcome.php");
-    }else
-        header("Location: index.php");
 
-    include('head.php');
 ?>
 
-<div class="container">
-	<div class="page-header">
-    	<h1 class="h2">&nbsp; 사용자 목록</h1><hr>
-    </div>
-<div class="row">
+<html>
 
-    <table class="table table-bordered table-hover table-striped" style="table-layout: fixed">
-        <thead>
-        <tr>
-            <th>아이디</th>
-            <th>프로필</th>
-            <th>계정 활성화</th>
-            <th>수정</th>
-            <th>삭제</th>
-        </tr>
-        </thead>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-kr">
+<title></title>
+</head>
+<body>
 
-        <?php
-	    $stmt = $con->prepare('SELECT * FROM users ORDER BY username DESC');
-	    $stmt->execute();
+<table style="width:1000px;height:50px;border:5px #CCCCCC solid;">
+    <tr>
+        <td align="center" valign="middle" colspan="3" style="font-zise:15px;font-weight:bold;">
+        관리자 페이지 입니다.
+        </td>
+    </tr>
+    <tr>
+        <td align="center" valign="middle" style="font-size:12px;"><a href="/admin/admin_board_list.php">게시판목록</a></td>
+        <td align="center" valign="middle" style="font-size:12px;"><a href="/admin/admin_member_list.php">회원목록</a></td>
+        <td align="center" valign="middle" style="font-size:12px;"><a href="/member/logout.php">로그아웃</a></td>
+    </tr>
+</table>
 
-            if ($stmt->rowCount() > 0)
-            {
-                while($row=$stmt->fetch(PDO::FETCH_ASSOC))
-	        {
-		    extract($row);
-
-		if ($username != 'admin'){
-		?>
-			<tr>
-			<td><?php echo $username;  ?></td>
-			<td><?php echo $userprofile; ?></td>
-			<td>
-			<?php
-			if($activate)
-			{
-				echo "활성";
-			} else{
-			    echo "비활성";
-			}
-			?>
-			</td>
-			<td><a class="btn btn-primary" href="editform.php?edit_id=<?php echo $username ?>"><span class="glyphicon glyphicon-pencil"></span> Edit</a></td>
-			<td><a class="btn btn-warning" href="delete.php?del_id=<?php echo $username ?>" onclick="return confirm('<?php echo $username ?> 사용자를 삭제할까요?')">
-			<span class="glyphicon glyphicon-remove"></span>Del</a></td>
-			</tr>
-
-        <?php
-			}
-                }
-             }
-        ?>
-        </table>
-</div>
 
 </body>
 </html>

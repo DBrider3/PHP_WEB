@@ -1,22 +1,18 @@
-<!DOCTYPE>
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'].'/check.php';
-require_once $_SERVER['DOCUMENT_ROOT'].'/head.php';
-
+// 1. 공통
+require_once $_SERVER['DOCUMENT_ROOT'].'/admin.php';
 // db연결
 require_once $_SERVER['DOCUMENT_ROOT'].'/dbcon.php';
-
 $connection= new mysqli($hn,$un,$pw,$db);
 
 if($connection->connect_error) die($connection->connect_error);
 // db검증 필수 사항
 
-$query ="select * from board order by idx desc";
+$query ="select * from users order by idx desc";
 $result = $connection->query($query);
 $total = mysqli_num_rows($result);
 
 ?>
-
 
 <html>
 <head>
@@ -53,16 +49,17 @@ $total = mysqli_num_rows($result);
 </head>
 <body>
 
-<!-- 게시판 리스트-->
-  <h2 align=center>게시판</h2>
+<!-- 회원 리스트-->
+
+  <h2 align=center>사용자 목록</h2>
   <table align = center>
   <thead align = "center">
   <tr>
-  <td width = "50" align="center">번호</td>
-  <td width = "500" align = "center">제목</td>
-  <td width = "100" align = "center">작성자</td>
-  <td width = "200" align = "center">날짜</td>
-  <td width = "50" align = "center">조회수</td>
+  <td width = "50" align="center">아이디</td>
+  <td width = "100" align = "center">패스워드</td>
+  <td width = "100" align = "center">이메일</td>
+  <td width = "50" align = "center">수정</td>
+  <td width = "50" align = "center">삭제</td>
   </tr>
   </thead>
 
@@ -74,25 +71,32 @@ $total = mysqli_num_rows($result);
                   <?php   }
                   else{
   ?>                      <tr>
-                  <?php } ?>
-          <td width = "50" align = "center"><?php echo $total?></td>
-          <td width = "500" align = "center">
-          <a href = "view.php?idx=<?php echo $rows['idx']?>">
-          <?php echo $rows['title']?></td>
-            <td width = "100" align = "center"><?php echo $rows['id']?></td>
-          <td width = "200" align = "center"><?php echo $rows['date']?></td>
-          <td width = "50" align = "center"><?php echo $rows['hit']?></td>
+                  <?php }
+
+          if ($rows['id'] != 'admin'){
+  ?>
+          <td width = "50" align = "center"><?php echo $rows['id']?></td>
+          <td width = "100" align = "center"><?php echo $rows['pw']?></td>
+          <td width = "100" align = "center"><?php echo $rows['email']?></td>
+          <th width = "10" align = "center">
+            <a class="btn btn-primary" href="admin_member_modify.php?idx=<?php echo $rows['idx'] ?>"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
+          </th>
+          <th width = "10" align = "center">
+            <a class="btn btn-warning" href="admin_member_delete.php?del_id=<?php echo $rows['id']?>" onclick="return confirm('<?php echo $rows['id']?> 사용자를 삭제할까요?')">
+      			<span class="glyphicon glyphicon-remove"></span>Del</a>
+          </th>
+
+    			</tr>
           </tr>
   <?php
           $total--;
           }
+        }
   ?>
   </tbody>
   </table>
 
-  <div class = text>
-  <font style="cursor: hand"onClick="location.href='./write.php'">글쓰기</font>
-  </div>
+
 
 </body>
 </html>
